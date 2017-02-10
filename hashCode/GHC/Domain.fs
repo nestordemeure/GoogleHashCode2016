@@ -29,6 +29,13 @@ let distance (ra,ca) (rb,cb) =
    (ra-rb)*(ra-rb) + (ca-cb)*(ca-cb)
    |> float |> sqrt |> ceil |> int
 
+let computeDistanceTime warehousePosition drone =
+      (distance drone.position warehousePosition) + drone.time
+
+let findDrone warehousePosition drones = 
+      Array.sortBy (computeDistanceTime warehousePosition) drones
+
+
 type Consigne =
    | Load of int*int*int // warehouse * prodtype * quantity
    | Unload of int*int*int // warehouse * prodtype * quantity
