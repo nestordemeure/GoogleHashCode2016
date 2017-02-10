@@ -69,7 +69,7 @@ let solution droneNumber deadLine maxLoad (productWeights:_[]) (warehouses:_[]) 
          let warehouse = warehouses.[warehouseId]
          // would be more efficent to consume drone as it goes
          let dronesByDistance = findDrones warehouse.cell drones |> Array.toList
-         let prodList = List.sortByDescending (fun x -> productWeights.[x]) kv.Value// TODO sort from big to small
+         let prodList = List.sortByDescending (fun x -> productWeights.[x]) kv.Value
          result <- giveOrders warehouseId order.idO order.adress warehouse.cell productWeights dronesByDistance prodList [] result
 
    List.rev result
