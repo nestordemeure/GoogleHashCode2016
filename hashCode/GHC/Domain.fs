@@ -18,8 +18,8 @@ type Order = {adress : Coord ; products : Product list}
 
 type Drone = { position : Coord ; content : Product list ; loadLeft : int ; maxLoad : int}
 
-let droneCreates droneNumber maxLoad =
-   [||]
+let droneCreates droneNumber maxLoad warehouseDefault =
+   Array.create droneNumber ({ position = warehouseDefault ; content = [] ; loadLeft = maxLoad; maxLoad = maxLoad})
 
 //-------------------------------------------------------------------------------------------------
 
