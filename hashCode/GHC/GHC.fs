@@ -32,5 +32,5 @@ let main argv =
     //evaluation r
     printfn "score : %d" score
     //export 
-    export "../output.txt" [||]
+    export "../output.txt" sol
     0 // return an integer exit code

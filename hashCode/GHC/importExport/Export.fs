@@ -17,6 +17,17 @@ let listToString sep (l : string list) =
 //-------------------------------------------------------------------------------------------------
 // EXPORTATION
 
-let export path lines =
-   //File.WriteAllText(path, text)
+let stringOfConsigne c = 
+   match c with 
+   | Load (droneId,warehouse, prodtype, quantity) ->
+      sprintf "%d L %d %d %d" droneId warehouse prodtype quantity
+   | Unload (droneId,warehouse, prodtype, quantity) ->
+      sprintf "%d U %d %d %d" droneId warehouse prodtype quantity
+   | Deliver (droneId,orderId, prodtype, quantity) ->
+      sprintf "%d D %d %d %d" droneId orderId prodtype quantity
+   | Wait (droneId,turnNumber) -> 
+      sprintf "%d W %d" droneId turnNumber
+
+let export path consignes =
+   let lines = List.map stringOfConsigne consignes
    File.WriteAllLines(path, lines)
