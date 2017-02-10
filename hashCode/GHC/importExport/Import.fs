@@ -23,7 +23,7 @@ let import path =
    let warehouseNumber = text.[3] |> int
    let warehouses = 
       [|
-         for w = 4 to 4 + 2*warehouseNumber - 1 do
+         for w in [4 .. 2 ..(4 + 2*warehouseNumber - 1)] do
             let (r,c) = sscanf "%d %d" text.[w]
             let stock = text.[w+1] |> String.split [|' '|] |> Array.map int
             yield {cell = (r,c) ; stock = stock}
@@ -31,7 +31,7 @@ let import path =
    let orderNumber = text.[4 + 2*warehouseNumber] |> int
    let orders =
       [|
-         for o = (4 + 2*warehouseNumber + 1) to (4 + 2*warehouseNumber + 1) + 3*orderNumber - 1 do
+         for o in [4 + 2*warehouseNumber + 1 .. 3 .. (4 + 2*warehouseNumber + 1) + 3*orderNumber - 1] do
             let (r,c) = sscanf "%d %d" text.[o]
             let order = text.[o+2] |> String.split [|' '|] |> Array.map int |> Array.toList
             yield {adress = (r,c) ; products = order}
