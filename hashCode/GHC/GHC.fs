@@ -15,19 +15,20 @@ open System.Collections.Generic
 
 [<EntryPoint>]
 let main argv =
-    // import
-    //let inPath = "../inputs/busy_day.in"
-    let inPath = "../inputs/mother_of_all_warehouses.in"
-    let (rowNumber,colNumber,droneNumber,deadLine,maxLoad, productWeights, warehouses, orders) = 
+   // import
+   //let inPath = "../inputs/busy_day.in"
+   //let inPath = "../inputs/mother_of_all_warehouses.in"
+   let inPath = "../inputs/redundancy.in"
+   let (rowNumber,colNumber,droneNumber,deadLine,maxLoad, productWeights, warehouses, orders) = 
       import inPath
-    // solution
-    let sol = solution droneNumber deadLine maxLoad productWeights warehouses orders
-    // evaluation
-    printfn "score : %d" score
-    score <- 0
-    //export 
-    export "../output.txt" sol
-    0 // return an integer exit code
+   // solution
+   let sol = solution droneNumber deadLine maxLoad productWeights warehouses orders
+   // evaluation
+   printfn "score : %d" score
+   score <- 0
+   //export 
+   export "../output.txt" sol
+   0 // return an integer exit code
 
 // add timeout
 
