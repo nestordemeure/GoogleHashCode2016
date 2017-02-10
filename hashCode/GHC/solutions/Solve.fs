@@ -22,6 +22,7 @@ let book (order:Order) (product:Product) (warehouse:Warehouse) =
 //-------------------------------------------------------------------------------------------------
 // apelle les drones nécéssaire pour etre complet
 
+let mutable lastDrone = 0
 let rec consigneOfCharge droneId warehouseId orderId charge = 
    match charge with 
    | [] -> []
@@ -43,6 +44,7 @@ let rec giveOrders warehouseId orderId adress cell (pWeights:int []) dronesList 
       drone.time <- drone.time + (distance drone.position cell) + (distance cell adress) //temps de trajet
       drone.time <- drone.time + 2*(List.length charge) // temps de chargement/déchargement
       drone.position <- adress
+      lastDrone <- max drone.time lastDrone
       let newConsignes = (consigneOfCharge drone.idD warehouseId orderId charge) @ consignes // ajouter toute les consignes
       giveOrders warehouseId orderId adress cell pWeights dq prodList [] newConsignes
    | p::pq, drone::dq ->
@@ -50,6 +52,14 @@ let rec giveOrders warehouseId orderId adress cell (pWeights:int []) dronesList 
       drone.loadLeft <- drone.loadLeft - pWeights.[p]
       giveOrders warehouseId orderId adress cell pWeights dronesList pq (p::charge) consignes
 
+//-------------------------------------------------------------------------------------------------
+// compute solution KeyValue
+
+let mutable score = 0
+
+let increaseSolution deadLine = 
+   let timeSpend = float (deadLine-lastDrone) / float deadLine |> (*) 100. |> ceil |> int
+   score <- score + timeSpend
 
 //-------------------------------------------------------------------------------------------------
 // SOLUTION
@@ -70,6 +80,7 @@ let solution droneNumber deadLine maxLoad (productWeights:_[]) (warehouses:_[]) 
          // would be more efficent to consume drone as it goes
          let dronesByDistance = findDrones warehouse.cell drones |> Array.toList
          let prodList = List.sortByDescending (fun x -> productWeights.[x]) kv.Value
+         lastDrone <- -1
          result <- giveOrders warehouseId order.idO order.adress warehouse.cell productWeights dronesByDistance prodList [] result
-
+         increaseSolution deadLine
    List.rev result
