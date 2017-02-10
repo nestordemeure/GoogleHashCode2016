@@ -24,11 +24,12 @@ let evaluation solution = ()
 let main argv =
     // import
     let inPath = "../inputs/busy_day.in"
-    let r = import inPath
+    let (rowNumber,colNumber,droneNumber,deadLine,maxLoad, productWeights, warehouses, orders) = 
+      import inPath
     // solution
 
     // evaluation
-    evaluation r
+    //evaluation r
     printfn "score : %d" score
     //export 
     export "../output.txt" [||]
