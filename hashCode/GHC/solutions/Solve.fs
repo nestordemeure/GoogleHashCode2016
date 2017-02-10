@@ -14,13 +14,13 @@ open GHC.Domain
 //-------------------------------------------------------------------------------------------------
 // apelle les drones nécéssaire pour etre complet
 
-let rec consigneOfCharge warehouseId orderId charge = 
+let rec consigneOfCharge droneId warehouseId orderId charge = 
    match charge with 
    | [] -> []
    | (p,qt)::q -> 
-      let before = Load (warehouseId,p,qt)
-      let after = Deliver (orderId,p,qt)
-      after :: (consigneOfCharge warehouseId orderId q) @ [before]
+      let before = Load (droneId,warehouseId,p,qt)
+      let after = Deliver (droneId,orderId,p,qt)
+      after :: (consigneOfCharge droneId warehouseId orderId q) @ [before]
 
 
 // tant qu'on a des items à charger
@@ -29,14 +29,14 @@ let rec consigneOfCharge warehouseId orderId charge =
 let rec giveOrders warehouseId orderId adress cell (pWeights:int []) dronesList prodList charge consignes = 
    match prodList, dronesList with 
    | [],_ | _,[] -> consignes
-   | p::pq, drone::dq when drone.loadLeft < pWeights.[p] -> 
+   | p::pq, drone::dq when drone.loadLeft < pWeights.[p] -> // TODO more efficient if we search for an item small enough to be put in the drone
       // le drone est pleins, on l'envois (implicite) et on en charge un nouveau
       let charge = List.countBy id charge
       drone.loadLeft <- drone.maxLoad
       drone.time <- drone.time + (distance drone.position cell) + (distance cell adress) //temps de trajet
       drone.time <- drone.time + 2*(List.length charge) // temps de chargement/déchargement
       drone.position <- adress
-      let newConsignes = (consigneOfCharge warehouseId orderId charge) @ consignes // ajouter toute les consignes
+      let newConsignes = (consigneOfCharge drone.idD warehouseId orderId charge) @ consignes // ajouter toute les consignes
       giveOrders warehouseId orderId adress cell pWeights dq prodList [] newConsignes
    | p::pq, drone::dq ->
       // ajouter p au drone actuel

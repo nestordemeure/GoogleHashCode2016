@@ -37,7 +37,7 @@ let findDrones warehousePosition drones =
 
 
 type Consigne =
-   | Load of int*int*int // warehouse * prodtype * quantity
-   | Unload of int*int*int // warehouse * prodtype * quantity
-   | Deliver of int*int*int // orderId * prodtype * quantity
-   | Wait of int // turnNum
+   | Load of int*int*int*int // warehouse * prodtype * quantity
+   | Unload of int*int*int*int // warehouse * prodtype * quantity
+   | Deliver of int*int*int*int // orderId * prodtype * quantity
+   | Wait of int*int // turnNum
