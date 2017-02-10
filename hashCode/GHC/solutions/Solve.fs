@@ -14,8 +14,8 @@ let book (order:Order) (product:Product) (warehouse:Warehouse) =
    Array.set warehouse.stock product (warehouse.stock.[product]-1)
 
    match order.BookedProducts.TryGetValue(warehouse.idW) with
-   | (true, e1) -> order.BookedProducts.Add(warehouse.idW, (product::e1))
-   | _ -> order.BookedProducts.Add(warehouse.idW, [product])
+   | (true, e1) -> order.BookedProducts.[warehouse.idW] <- product::e1
+   | _ -> order.BookedProducts.[warehouse.idW] <- [product]
 
 let closestWharehouse (item:Product) (pos:Coord) (wl : Warehouse array) =
     // Get all Warehouses which contains the product
