@@ -38,7 +38,7 @@ let rec giveOrders adress cell (pWeights:int []) dronesList prodList consignes =
 // SOLUTION
 
 /// solution
-let solution droneNumber deadLine maxLoad productWeights (warehouses:_[]) orders = 
+let solution droneNumber deadLine maxLoad (productWeights:_[]) (warehouses:_[]) orders = 
    let drones = droneCreates droneNumber maxLoad warehouses.[0].cell
    let orders = orders |> Array.sortBy (fun o -> List.length o.products)
    let mutable result = []
@@ -51,7 +51,7 @@ let solution droneNumber deadLine maxLoad productWeights (warehouses:_[]) orders
          let warehouseId = kv.Key
          let warehouse = warehouses.[warehouseId]
          let dronesByDistance = findDrones warehouse.cell drones |> Array.toList
-         let prodList = kv.Value // TODO sort from big to small
+         let prodList = List.sortBy (fun x -> productWeights.[x]) kv.Value// TODO sort from big to small
          result <- giveOrders order.adress warehouse.cell productWeights dronesByDistance prodList result
 
    result
