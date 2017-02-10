@@ -11,13 +11,6 @@ open GHC.Export
 open System.Collections.Generic
 
 //-------------------------------------------------------------------------------------------------
-// EVALUATION
-
-let mutable score = 0
-
-let evaluation (solution:Consigne list) = ()
-
-//-------------------------------------------------------------------------------------------------
 // MAIN
 
 [<EntryPoint>]
@@ -29,8 +22,8 @@ let main argv =
     // solution
     let sol = solution droneNumber deadLine maxLoad productWeights warehouses orders
     // evaluation
-    evaluation sol
     printfn "score : %d" score
+    score <- 0
     //export 
     export "../output.txt" sol
     0 // return an integer exit code
