@@ -17,19 +17,19 @@ let book (order:Order) (product:Product) (warehouse:Warehouse) =
    | (true, e1) -> order.BookedProducts.Add(warehouse.idW, (product::e1))
    | _ -> order.BookedProducts.Add(warehouse.idW, [product])
 
-let closestWharehouse (item:Product) (pos:Coord) (wl : Warehouse list) =
+let closestWharehouse (item:Product) (pos:Coord) (wl : Warehouse array) =
     // Get all Warehouses which contains the product
-    let whWithProduct = List.filter (fun (w:Warehouse) -> w.stock.[item] > 0) wl
+    let whWithProduct = Array.filter (fun (w:Warehouse) -> w.stock.[item] > 0) wl
     // Computes the distances between the currend pos to each Warehouses
-    let distances = List.map (fun (w:Warehouse) -> distance w.cell pos) whWithProduct
+    let distances = Array.map (fun (w:Warehouse) -> distance w.cell pos) whWithProduct
     // We get the min of the distances and get the corresponding Warehouse
-    let min = List.min distances
-    match (List.tryFindIndex (fun x -> x = min) distances) with
+    let min = Array.min distances
+    match (Array.tryFindIndex (fun x -> x = min) distances) with
      | Some indice -> whWithProduct.[indice]
      | None -> raise (System.ArgumentException("Cannot find the item in any Warehouse"))
 
 
-let processOneOrder (o:Order) (wl : Warehouse list) =
+let processOneOrder (o:Order) (wl : Warehouse array) =
     for p in o.products do
         let w = closestWharehouse p o.adress wl
         book o p w
@@ -87,7 +87,7 @@ let solution droneNumber deadLine maxLoad (productWeights:_[]) (warehouses:_[]) 
    let mutable result = []
    /// chaque ordre va réserver chaque produit dans la warehouse la plus proche
    for order in orders do 
-      ()
+       processOneOrder order warehouses
    /// chaque ordre, pour chaque warehouse, apelle les drones nécéssaire pour etre complet
    for order in orders do
       for kv in order.BookedProducts do
