@@ -10,13 +10,29 @@ open GHC.Domain
 // chaque ordre va réserver chaque produit dans la warehouse la plus proche
 
 
-// Reserve le produit dans dans la warehouse de la commande donné
 let book (order:Order) (product:Product) (warehouse:Warehouse) =
    Array.set warehouse.stock product (warehouse.stock.[product]-1)
 
    match order.BookedProducts.TryGetValue(warehouse.idW) with
    | (true, e1) -> order.BookedProducts.Add(warehouse.idW, (product::e1))
    | _ -> order.BookedProducts.Add(warehouse.idW, [product])
+
+let closestWharehouse (item:Product) (pos:Coord) (wl : Warehouse list) =
+    // Get all Warehouses which contains the product
+    let whWithProduct = List.filter (fun (w:Warehouse) -> w.stock.[item] > 0) wl
+    // Computes the distances between the currend pos to each Warehouses
+    let distances = List.map (fun (w:Warehouse) -> distance w.cell pos) whWithProduct
+    // We get the min of the distances and get the corresponding Warehouse
+    let min = List.min distances
+    match (List.tryFindIndex (fun x -> x = min) distances) with
+     | Some indice -> whWithProduct.[indice]
+     | None -> raise (System.ArgumentException("Cannot find the item in any Warehouse"))
+
+
+let processOneOrder (o:Order) (wl : Warehouse list) =
+    for p in o.products do
+        let w = closestWharehouse p o.adress wl
+        book o p w
 
 
 //-------------------------------------------------------------------------------------------------
