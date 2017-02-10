@@ -28,7 +28,7 @@ let distance (ra,ca) (rb,cb) =
    |> float |> sqrt |> ceil |> int
 
 type Consigne =
-   | Load
-   | Unload
-   | Deliver
-   | Wait of int
+   | Load of int*int*int // warehouse * prodtype * quantity
+   | Unload of int*int*int // warehouse * prodtype * quantity
+   | Deliver of int*int*int // orderId * prodtype * quantity
+   | Wait of int // turnNum
