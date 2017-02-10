@@ -16,4 +16,4 @@ open GHC.Domain
 /// solution
 let solution droneNumber deadLine maxLoad productWeights warehouses orders = 
    let drones = droneCreates droneNumber maxLoad
-   droneNumber
+   

@@ -16,10 +16,10 @@ type Warehouse = { cell : Coord ; stock : Product array }
 
 type Order = {adress : Coord ; products : Product list}
 
-type Drone = { position : Coord ; content : Product list ; loadLeft : int }
+type Drone = { position : Coord ; content : Product list ; loadLeft : int ; maxLoad : int}
 
 let droneCreates droneNumber maxLoad =
-   // TODO
+   [||]
 
 //-------------------------------------------------------------------------------------------------
 
