@@ -7,6 +7,8 @@ open GHC.Extensions.Common
 open GHC.Domain
 
 //-------------------------------------------------------------------------------------------------
+// chaque ordre va réserver chaque produit dans la warehouse la plus proche
+
 
 
 //-------------------------------------------------------------------------------------------------
@@ -26,8 +28,10 @@ let solution droneNumber deadLine maxLoad productWeights (warehouses:_[]) orders
    for order in orders do
 
    /// chaque ordre, pour chaque warehouse, apelle les dronnes nécéssaire pour etre complet
-   for o = 0 to (Array.length orders) - 1 do 
+   for o = 0 to orders.Length - 1 do 
       let order = orders.[o]
-      for warehouse in order.warehouses do 
+      for kv in order.BookedProducts do
+         let warehouse = kv.Key
+         let prodList = kv.Value
          calldrones warehouse order.
 
