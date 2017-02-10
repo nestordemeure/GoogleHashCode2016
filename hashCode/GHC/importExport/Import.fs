@@ -3,6 +3,7 @@ module GHC.Import
 open System.IO
 open ExtCore.Collections
 open ExtCore.IO
+open System.Collections.Generic
 
 open GHC.Extensions.Common
 open GHC.Extensions.Scanf
@@ -26,7 +27,8 @@ let import path =
          for w in [4 .. 2 .. (4 + 2*warehouseNumber - 1)] do
             let (r,c) = sscanf "%d %d" text.[w]
             let stock = text.[w+1] |> String.split [|' '|] |> Array.map int
-            yield {cell = (r,c) ; stock = stock}
+            let id = w - 4
+            yield {idW = id; cell = (r,c) ; stock = stock}
       |]
    let orderNumber = text.[4 + 2*warehouseNumber] |> int
    let orders =
@@ -34,6 +36,7 @@ let import path =
          for o in [4 + 2*warehouseNumber + 1 .. 3 .. (4 + 2*warehouseNumber + 1) + 3*orderNumber - 1] do
             let (r,c) = sscanf "%d %d" text.[o]
             let order = text.[o+2] |> String.split [|' '|] |> Array.map int |> Array.toList
-            yield {adress = (r,c) ; products = order}
+            let id = o - (4 + 2*warehouseNumber + 1)
+            yield {idO = id; adress = (r,c) ; products = order ; BookedProducts = Dictionary()}
       |]
    rowNumber,colNumber,droneNumber,deadLine,maxLoad, productWeights, warehouses, orders

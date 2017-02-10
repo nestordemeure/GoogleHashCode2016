@@ -13,9 +13,9 @@ type Coord = int * int
 
 type Product = int
 
-type Order = {adress : Coord ; products : Product list ; BookedProducts : Dictionary<int (*warehouse id*),Product list> }
+type Order = {idO : int ; adress : Coord ; products : Product list ; BookedProducts : Dictionary<int (*warehouse id*),Product list> }
 
-type Warehouse = { cell : Coord ; stock : Product array}
+type Warehouse = { idW : int ; cell : Coord ; stock : Product array}
 
 type Drone = { position : Coord ; content : Product list ; loadLeft : int ; maxLoad : int ; time : int}
 
