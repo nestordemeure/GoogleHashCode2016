@@ -18,7 +18,7 @@ type Order = {adress : Coord ; products : Product list}
 
 type Drone = { position : Coord ; content : Product list ; loadLeft : int ; maxLoad : int ; time : int}
 
-let droneCreates droneNumber maxLoad =
+let droneCreates basePosition droneNumber maxLoad =
    [||]
 
 //-------------------------------------------------------------------------------------------------
@@ -27,3 +27,8 @@ let distance (ra,ca) (rb,cb) =
    (ra-rb)*(ra-rb) + (ca-cb)*(ca-cb)
    |> float |> sqrt |> ceil |> int
 
+type Consigne =
+   | Load
+   | Unload
+   | Deliver
+   | Wait of int
