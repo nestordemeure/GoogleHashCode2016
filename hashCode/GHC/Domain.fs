@@ -19,11 +19,17 @@ type Warehouse = { cell : Coord ; stock : Product array; BookedProducts : Dictio
 
 type Drone = { position : Coord ; content : Product list ; loadLeft : int ; maxLoad : int ; time : int}
 
-let droneCreates droneNumber maxLoad =
-   [||]
+let droneCreates droneNumber maxLoad warehouseDefault =
+   Array.create droneNumber { position = warehouseDefault ; content = [] ; loadLeft = maxLoad; maxLoad = maxLoad; time=0}
 
 //-------------------------------------------------------------------------------------------------
 
 let distance (ra,ca) (rb,cb) =
    (ra-rb)*(ra-rb) + (ca-cb)*(ca-cb)
    |> float |> sqrt |> ceil |> int
+
+type Consigne =
+   | Load of int*int*int // warehouse * prodtype * quantity
+   | Unload of int*int*int // warehouse * prodtype * quantity
+   | Deliver of int*int*int // orderId * prodtype * quantity
+   | Wait of int // turnNum
