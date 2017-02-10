@@ -38,6 +38,12 @@ let processOneOrder (o:Order) (wl : Warehouse array) =
 //-------------------------------------------------------------------------------------------------
 // apelle les drones nécéssaire pour etre complet
 
+let rec insertSorted x fx l =
+   match l with 
+   | [] -> [x]
+   | t::q when f t < fx -> t::(insertSorted x fx q)
+   | _ -> x::l
+
 let mutable lastDrone = 0
 let rec consigneOfCharge droneId warehouseId orderId charge = 
    match charge with 
