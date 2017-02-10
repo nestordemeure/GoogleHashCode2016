@@ -16,7 +16,8 @@ open System.Collections.Generic
 [<EntryPoint>]
 let main argv =
     // import
-    let inPath = "../inputs/busy_day.in"
+    //let inPath = "../inputs/busy_day.in"
+    let inPath = "../inputs/mother_of_all_warehouses.in"
     let (rowNumber,colNumber,droneNumber,deadLine,maxLoad, productWeights, warehouses, orders) = 
       import inPath
     // solution

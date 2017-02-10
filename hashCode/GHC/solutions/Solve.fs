@@ -38,10 +38,10 @@ let processOneOrder (o:Order) (wl : Warehouse array) =
 //-------------------------------------------------------------------------------------------------
 // apelle les drones nécéssaire pour etre complet
 
-let rec insertSorted x fx l =
+let rec insertSorted x f fx l =
    match l with 
    | [] -> [x]
-   | t::q when f t < fx -> t::(insertSorted x fx q)
+   | t::q when f t < fx -> t::(insertSorted x f fx q)
    | _ -> x::l
 
 let mutable lastDrone = 0
@@ -67,7 +67,7 @@ let rec giveOrders warehouseId orderId adress cell (pWeights:int []) dronesList 
       drone.time <- drone.time + 2*(List.length charge) // temps de chargement/déchargement
       drone.position <- adress
       lastDrone <- max drone.time lastDrone
-      let newDroneList = insertSorted drone dq
+      let newDroneList = dq //insertSorted drone dq
       let newConsignes = (consigneOfCharge drone.idD warehouseId orderId charge) @ consignes // ajouter toute les consignes
       giveOrders warehouseId orderId adress cell pWeights newDroneList prodList [] newConsignes
    | p::pq, drone::dq ->
@@ -101,11 +101,15 @@ let solution droneNumber deadLine maxLoad (productWeights:_[]) (warehouses:_[]) 
          let warehouseId = kv.Key
          let warehouse = warehouses.[warehouseId]
          // would be more efficent to consume drone as it goes
-         let dronesByDistance = findDrones warehouse.cell drones |> Array.toList
+         let dronesByDistance = drones |> copyArrayBy |> findDrones warehouse.cell
          let prodList = List.sortByDescending (fun x -> productWeights.[x]) kv.Value
          lastDrone <- -1
-         result <- giveOrders warehouseId order.idO order.adress warehouse.cell productWeights dronesByDistance prodList [] result
-         increaseSolution deadLine
+         let newResult = giveOrders warehouseId order.idO order.adress warehouse.cell productWeights (Array.toList dronesByDistance) prodList [] result
+         printfn "%d" lastDrone
+         if lastDrone <= deadLine then 
+            result <- newResult 
+            increaseSolution deadLine
+            Array.iteri (fun i d -> drones.[i] <- d) dronesByDistance
    List.rev result
 
 // regrouper les produit en quantitée, prod et les triées

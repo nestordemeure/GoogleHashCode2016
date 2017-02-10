@@ -23,6 +23,10 @@ let droneCreates droneNumber maxLoad warehouseDefault =
    Array.init droneNumber
       (fun i -> { idD = i ; position = warehouseDefault ; loadLeft = maxLoad; maxLoad = maxLoad; time=0})
 
+let copyDrone d = {d with position = d.position; time=d.time}
+
+let copyArrayBy (a:Drone array) = Array.init a.Length (fun i -> copyDrone a.[i]) 
+
 //-------------------------------------------------------------------------------------------------
 
 let distance (ra,ca) (rb,cb) =
