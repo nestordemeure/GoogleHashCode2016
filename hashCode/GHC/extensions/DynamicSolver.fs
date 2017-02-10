@@ -48,7 +48,7 @@ let emptyState = {weight=0 ; price=0 ; objects=[]}
 let knapsackDyn maxWeight (objects : Object list) =
   let mutable previousSolution = emptyState
   let solution = Array.create (maxWeight+1) emptyState 
-  for ob in objects do 
+  for ob in objects do
     previousSolution <- solution.[ob.weight-1]
     for i = ob.weight to maxWeight do 
        let newWeight = previousSolution.weight + ob.weight
