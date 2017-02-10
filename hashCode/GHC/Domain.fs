@@ -29,15 +29,17 @@ let distance (ra,ca) (rb,cb) =
    (ra-rb)*(ra-rb) + (ca-cb)*(ca-cb)
    |> float |> sqrt |> ceil |> int
 
+//compute the cost of a given drone
 let computeDistanceTime warehousePosition drone =
       (distance drone.position warehousePosition) + drone.time
 
+//Orders the drones depending on their time and distance to the warehouse
 let findDrones warehousePosition drones = 
       Array.sortBy (computeDistanceTime warehousePosition) drones
 
 
 type Consigne =
-   | Load of int*int*int // warehouse * prodtype * quantity
-   | Unload of int*int*int // warehouse * prodtype * quantity
-   | Deliver of int*int*int // orderId * prodtype * quantity
-   | Wait of int // turnNum
+   | Load of int*int*int*int // warehouse * prodtype * quantity
+   | Unload of int*int*int*int // warehouse * prodtype * quantity
+   | Deliver of int*int*int*int // orderId * prodtype * quantity
+   | Wait of int*int // turnNum

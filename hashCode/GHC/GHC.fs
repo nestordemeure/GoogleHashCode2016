@@ -15,7 +15,7 @@ open System.Collections.Generic
 
 let mutable score = 0
 
-let evaluation solution = ()
+let evaluation (solution:Consigne list) = ()
 
 //-------------------------------------------------------------------------------------------------
 // MAIN
@@ -29,8 +29,8 @@ let main argv =
     // solution
     let sol = solution droneNumber deadLine maxLoad productWeights warehouses orders
     // evaluation
-    //evaluation r
+    evaluation sol
     printfn "score : %d" score
     //export 
-    export "../output.txt" [||]
+    export "../output.txt" sol
     0 // return an integer exit code
