@@ -38,10 +38,10 @@ let processOneOrder (o:Order) (wl : Warehouse array) =
 //-------------------------------------------------------------------------------------------------
 // apelle les drones nécéssaire pour etre complet
 
-let rec insertSorted x fx l =
+let rec insertSorted x warehouse fx l =
    match l with 
    | [] -> [x]
-   | t::q when f t < fx -> t::(insertSorted x fx q)
+   | t::q when (computeDistanceTime warehouse.cell t) < fx -> t::(insertSorted x warehouse fx q)
    | _ -> x::l
 
 let mutable lastDrone = 0
@@ -56,7 +56,7 @@ let rec consigneOfCharge droneId warehouseId orderId charge =
 // tant qu'on a des items à charger
    // remplir drone
    // envoyer le drone
-let rec giveOrders warehouseId orderId adress cell (pWeights:int []) dronesList prodList charge consignes =
+let rec giveOrders warehouse orderId adress cell (pWeights:int []) dronesList prodList charge consignes =
    match prodList, dronesList with
    | [],_ | _,[] -> consignes
    | p::pq, drone::dq when drone.loadLeft < pWeights.[p] -> // TODO more efficient if we search for an item small enough to be put in the drone
@@ -67,13 +67,13 @@ let rec giveOrders warehouseId orderId adress cell (pWeights:int []) dronesList 
       drone.time <- drone.time + 2*(List.length charge) // temps de chargement/déchargement
       drone.position <- adress
       lastDrone <- max drone.time lastDrone
-      let newDroneList = insertSorted drone dq
-      let newConsignes = (consigneOfCharge drone.idD warehouseId orderId charge) @ consignes // ajouter toute les consignes
-      giveOrders warehouseId orderId adress cell pWeights newDroneList prodList [] newConsignes
+      let newDroneList = insertSorted drone warehouse (computeDistanceTime warehouse.cell drone) dq
+      let newConsignes = (consigneOfCharge drone.idD (warehouse.idW) orderId charge) @ consignes // ajouter toute les consignes
+      giveOrders warehouse orderId adress cell pWeights newDroneList prodList [] newConsignes
    | p::pq, drone::dq ->
       // ajouter p au drone actuel
       drone.loadLeft <- drone.loadLeft - pWeights.[p]
-      giveOrders warehouseId orderId adress cell pWeights dronesList pq (p::charge) consignes
+      giveOrders warehouse orderId adress cell pWeights dronesList pq (p::charge) consignes
 
 //-------------------------------------------------------------------------------------------------
 // compute solution KeyValue
@@ -104,7 +104,7 @@ let solution droneNumber deadLine maxLoad (productWeights:_[]) (warehouses:_[]) 
          let dronesByDistance = findDrones warehouse.cell drones |> Array.toList
          let prodList = List.sortByDescending (fun x -> productWeights.[x]) kv.Value
          lastDrone <- -1
-         result <- giveOrders warehouseId order.idO order.adress warehouse.cell productWeights dronesByDistance prodList [] result
+         result <- giveOrders warehouse order.idO order.adress warehouse.cell productWeights dronesByDistance prodList [] result
          increaseSolution deadLine
    List.rev result
 
