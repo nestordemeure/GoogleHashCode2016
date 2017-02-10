@@ -51,8 +51,6 @@ let bestCost (wl : Warehouse array) (orders : Order array) =
      | Some indice -> orders.[indice], (removePos orders indice)
      | None -> raise (System.ArgumentException("Logical problem"))
 
-
-
 //-------------------------------------------------------------------------------------------------
 // apelle les drones nécéssaire pour etre complet
 
@@ -108,11 +106,20 @@ let increaseSolution deadLine =
 /// solution
 let solution droneNumber deadLine maxLoad (productWeights:_[]) (warehouses:_[]) orders = 
    let drones = droneCreates droneNumber maxLoad warehouses.[0].cell
-   let orders = orders |> Array.sortBy (fun o -> List.length o.products)
+   //let  orders = orders //|> Array.sortBy (fun o -> List.length o.products)
    let mutable result = []
    /// chaque ordre va réserver chaque produit dans la warehouse la plus proche
-   for order in orders do 
-       processOneOrder order warehouses
+   //for order in orders do 
+   //    processOneOrder order warehouses
+   let orders = 
+      [|
+         let mutable ordersTemp = orders
+         while ordersTemp <> Array.empty do
+            let (order,newOrders) = bestCost warehouses ordersTemp
+            ordersTemp <- newOrders
+            processOneOrder order warehouses
+            yield order
+      |]
    /// chaque ordre, pour chaque warehouse, apelle les drones nécéssaire pour etre complet
    for order in orders do
       for kv in order.BookedProducts do
