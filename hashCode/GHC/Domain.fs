@@ -20,7 +20,7 @@ type Warehouse = { idW : int ; cell : Coord ; stock : Product array}
 type Drone = { idD : int ; mutable position : Coord ; mutable loadLeft : int ; maxLoad : int ; mutable time : int}
 
 let droneCreates droneNumber maxLoad warehouseDefault =
-   Array.init droneNumber 
+   Array.init droneNumber
       (fun i -> { idD = i ; position = warehouseDefault ; loadLeft = maxLoad; maxLoad = maxLoad; time=0})
 
 //-------------------------------------------------------------------------------------------------

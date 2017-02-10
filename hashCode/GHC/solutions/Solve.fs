@@ -10,6 +10,14 @@ open GHC.Domain
 // chaque ordre va réserver chaque produit dans la warehouse la plus proche
 
 
+// Reserve le produit dans dans la warehouse de la commande donné
+let book (order:Order) (product:Product) (warehouse:Warehouse) =
+   Array.set warehouse.stock product (warehouse.stock.[product]-1)
+
+   match order.BookedProducts.TryGetValue(warehouse.idW) with
+   | (true, e1) -> order.BookedProducts.Add(warehouse.idW, (product::e1))
+   | _ -> order.BookedProducts.Add(warehouse.idW, [product])
+
 
 //-------------------------------------------------------------------------------------------------
 // apelle les drones nécéssaire pour etre complet
@@ -22,12 +30,11 @@ let rec consigneOfCharge droneId warehouseId orderId charge =
       let after = Deliver (droneId,orderId,p,qt)
       after :: (consigneOfCharge droneId warehouseId orderId q) @ [before]
 
-
 // tant qu'on a des items à charger
-   // remplir drone 
+   // remplir drone
    // envoyer le drone
-let rec giveOrders warehouseId orderId adress cell (pWeights:int []) dronesList prodList charge consignes = 
-   match prodList, dronesList with 
+let rec giveOrders warehouseId orderId adress cell (pWeights:int []) dronesList prodList charge consignes =
+   match prodList, dronesList with
    | [],_ | _,[] -> consignes
    | p::pq, drone::dq when drone.loadLeft < pWeights.[p] -> // TODO more efficient if we search for an item small enough to be put in the drone
       // le drone est pleins, on l'envois (implicite) et on en charge un nouveau
@@ -48,7 +55,7 @@ let rec giveOrders warehouseId orderId adress cell (pWeights:int []) dronesList 
 // SOLUTION
 
 /// solution
-let solution droneNumber deadLine maxLoad productWeights (warehouses:_[]) orders = 
+let solution droneNumber deadLine maxLoad productWeights (warehouses:_[]) orders =
    let drones = droneCreates droneNumber maxLoad warehouses.[0].cell
    let orders = orders |> Array.sortBy (fun o -> List.length o.products)
    let mutable result = []
@@ -56,7 +63,7 @@ let solution droneNumber deadLine maxLoad productWeights (warehouses:_[]) orders
    for order in orders do ()
 
    /// chaque ordre, pour chaque warehouse, apelle les drones nécéssaire pour etre complet
-   for order in orders do 
+   for order in orders do
       for kv in order.BookedProducts do
          let warehouseId = kv.Key
          let warehouse = warehouses.[warehouseId]
@@ -66,4 +73,3 @@ let solution droneNumber deadLine maxLoad productWeights (warehouses:_[]) orders
          result <- giveOrders warehouseId order.idO order.adress warehouse.cell productWeights dronesByDistance prodList [] result
 
    List.rev result
-
