@@ -54,7 +54,6 @@
     <Compile Include="importExport/Export.fs" />
     <Compile Include="solutions/Solve.fs" />
     <Compile Include="GHC.fs" />
-
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <Choose>
