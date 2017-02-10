@@ -61,8 +61,9 @@ let rec giveOrders warehouseId orderId adress cell (pWeights:int []) dronesList 
       drone.time <- drone.time + 2*(List.length charge) // temps de chargement/déchargement
       drone.position <- adress
       lastDrone <- max drone.time lastDrone
+      let newDroneList = insertSorted drone dq
       let newConsignes = (consigneOfCharge drone.idD warehouseId orderId charge) @ consignes // ajouter toute les consignes
-      giveOrders warehouseId orderId adress cell pWeights dq prodList [] newConsignes
+      giveOrders warehouseId orderId adress cell pWeights newDroneList prodList [] newConsignes
    | p::pq, drone::dq ->
       // ajouter p au drone actuel
       drone.loadLeft <- drone.loadLeft - pWeights.[p]
@@ -100,3 +101,5 @@ let solution droneNumber deadLine maxLoad (productWeights:_[]) (warehouses:_[]) 
          result <- giveOrders warehouseId order.idO order.adress warehouse.cell productWeights dronesByDistance prodList [] result
          increaseSolution deadLine
    List.rev result
+
+// regrouper les produit en quantitée, prod et les triées
