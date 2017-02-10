@@ -105,11 +105,11 @@ let solution droneNumber deadLine maxLoad (productWeights:_[]) (warehouses:_[]) 
          let prodList = List.sortByDescending (fun x -> productWeights.[x]) kv.Value
          lastDrone <- -1
          let newResult = giveOrders warehouse order.idO order.adress productWeights (Array.toList dronesByDistance) prodList [] result
-         printfn "%d" lastDrone
          if lastDrone <= deadLine then 
             result <- newResult 
             increaseSolution deadLine
             Array.iteri (fun i d -> drones.[i] <- d) dronesByDistance
+         else printfn "rejected order %d" order.idO
    List.rev result
 
 // regrouper les produit en quantitée, prod et les triées
