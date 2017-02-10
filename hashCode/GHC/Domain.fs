@@ -17,10 +17,11 @@ type Order = {idO : int ; adress : Coord ; products : Product list ; BookedProdu
 
 type Warehouse = { idW : int ; cell : Coord ; stock : Product array}
 
-type Drone = { position : Coord ; content : Product list ; loadLeft : int ; maxLoad : int ; time : int}
+type Drone = { idD : int ; mutable position : Coord ; mutable loadLeft : int ; maxLoad : int ; mutable time : int}
 
 let droneCreates droneNumber maxLoad warehouseDefault =
-   Array.create droneNumber { position = warehouseDefault ; content = [] ; loadLeft = maxLoad; maxLoad = maxLoad; time=0}
+   Array.init droneNumber 
+      (fun i -> { idD = i ; position = warehouseDefault ; loadLeft = maxLoad; maxLoad = maxLoad; time=0})
 
 //-------------------------------------------------------------------------------------------------
 

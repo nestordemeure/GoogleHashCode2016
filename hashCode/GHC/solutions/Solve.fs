@@ -12,7 +12,7 @@ open GHC.Domain
 
 
 //-------------------------------------------------------------------------------------------------
-// apelle les dronnes nécéssaire pour etre complet
+// apelle les drones nécéssaire pour etre complet
 
 
 
@@ -27,11 +27,15 @@ let solution droneNumber deadLine maxLoad productWeights (warehouses:_[]) orders
    /// chaque ordre va réserver chaque produit dans la warehouse la plus proche
    for order in orders do
 
-   /// chaque ordre, pour chaque warehouse, apelle les dronnes nécéssaire pour etre complet
-   for o = 0 to orders.Length - 1 do 
-      let order = orders.[o]
+   /// chaque ordre, pour chaque warehouse, apelle les drones nécéssaire pour etre complet
+   for order in orders do 
       for kv in order.BookedProducts do
-         let warehouse = kv.Key
+         let warehouseId = kv.Key
          let prodList = kv.Value
+         // tant qu'on a des items à charger
+            // trouver drone le plus proche
+            let droneId = findDrone warehousePosition drones
+            // remplir drone 
+            // envoyer le drone
          calldrones warehouse order.
 
