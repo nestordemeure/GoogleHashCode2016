@@ -26,7 +26,8 @@ let solution droneNumber deadLine maxLoad productWeights (warehouses:_[]) orders
    for order in orders do
 
    /// chaque ordre, pour chaque warehouse, apelle les dronnes nécéssaire pour etre complet
-   for order in orders do 
+   for o = 0 to (Array.length orders) - 1 do 
+      let order = orders.[o]
       for warehouse in order.warehouses do 
          calldrones warehouse order.
 
