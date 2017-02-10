@@ -27,7 +27,7 @@ let main argv =
     let (rowNumber,colNumber,droneNumber,deadLine,maxLoad, productWeights, warehouses, orders) = 
       import inPath
     // solution
-
+    let sol = solution droneNumber deadLine maxLoad productWeights warehouses orders
     // evaluation
     //evaluation r
     printfn "score : %d" score
