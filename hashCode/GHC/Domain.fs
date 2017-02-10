@@ -32,7 +32,7 @@ let distance (ra,ca) (rb,cb) =
 let computeDistanceTime warehousePosition drone =
       (distance drone.position warehousePosition) + drone.time
 
-let findDrone warehousePosition drones = 
+let findDrones warehousePosition drones = 
       Array.sortBy (computeDistanceTime warehousePosition) drones
 
 

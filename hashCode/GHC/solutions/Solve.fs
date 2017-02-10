@@ -25,10 +25,13 @@ let rec giveOrders adress cell (pWeights:int []) dronesList prodList consignes =
       drone.position <- adress
       drone.loadLeft <- drone.maxLoad
       drone.time <- drone.time + (distance drone.position cell) + (distance cell adress) + 1
-      giveOrders pWeights dq prodList consignes
+      let newConsignes = () :: consignes
+      giveOrders adress cell pWeights dq prodList consignes
    | p::pq, drone::dq ->
       drone.time <- drone.time + 1
       // ajouter p au drone actuel
+
+      giveOrders adress cell pWeights dronesList pq consignes
 
 
 //-------------------------------------------------------------------------------------------------
@@ -46,9 +49,10 @@ let solution droneNumber deadLine maxLoad productWeights (warehouses:_[]) orders
    for order in orders do 
       for kv in order.BookedProducts do
          let warehouseId = kv.Key
-         let dronesByDistance = findDrones warehousePosition drones |> Array.toList
-         let prodList = kv.Value
-         result <- giveOrders order.adress warehouses.[warehouseId].cell productWeights dronesByDistance prodList result
+         let warehouse = warehouses.[warehouseId]
+         let dronesByDistance = findDrones warehouse.cell drones |> Array.toList
+         let prodList = kv.Value // TODO sort from big to small
+         result <- giveOrders order.adress warehouse.cell productWeights dronesByDistance prodList result
 
    result
 
