@@ -17,7 +17,23 @@ open GHC.Domain
 // IMPORT
 
 let import path =
-   // File.ReadLines(path)
    let text = File.ReadAllLines(path)
-   let (a,b) = sscanf "%d %d" text.[0]
-   a
+   let (rowNumber,colNumber,droneNumber,deadLine,maxLoad) = sscanf "%d %d %d %d %d" text.[0]
+   let productWeights = text.[2] |> String.split [|' '|] |> Array.map int
+   let warehouseNumber = text.[3] |> int
+   let warehouses = 
+      [|
+         for w = 4 to 4 + 2*warehouseNumber - 1 do
+            let (r,c) = sscanf "%d %d" text.[w]
+            let stock = text.[w+1] |> String.split [|' '|] |> Array.map int
+            yield {cell = (r,c) ; stock = stock}
+      |]
+   let orderNumber = text.[4 + 2*warehouseNumber] |> int
+   let orders =
+      [|
+         for o = (4 + 2*warehouseNumber + 1) to (4 + 2*warehouseNumber + 1) + 3*orderNumber - 1 do
+            let (r,c) = sscanf "%d %d" text.[o]
+            let order = text.[o+2] |> String.split [|' '|] |> Array.map int |> Array.toList
+            yield {adress = (r,c) ; products = order}
+      |]
+   rowNumber,colNumber,droneNumber,deadLine,maxLoad, productWeights, warehouses, orders

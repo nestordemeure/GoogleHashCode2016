@@ -22,10 +22,8 @@ let evaluation solution = ()
 
 [<EntryPoint>]
 let main argv =
-(*
-    //printfn "%A" argv
     // import
-    let inPath = "../input.in"
+    let inPath = "../inputs/busy_day.in"
     let r = import inPath
     // solution
 
@@ -34,6 +32,4 @@ let main argv =
     printfn "score : %d" score
     //export 
     export "../output.txt" [||]
-*)
-
     0 // return an integer exit code
