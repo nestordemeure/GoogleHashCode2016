@@ -10,8 +10,6 @@ open GHC.Extensions.Common
 
 type Coord = int * int
 
-//type Product = { id : int ; weight : int }
-
 type Product = int
 
 type Warehouse = { cell : Coord ; stock : Product array }

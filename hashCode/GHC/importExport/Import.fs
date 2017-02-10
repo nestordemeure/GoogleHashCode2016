@@ -23,7 +23,7 @@ let import path =
    let warehouseNumber = text.[3] |> int
    let warehouses = 
       [|
-         for w in [4 .. 2 ..(4 + 2*warehouseNumber - 1)] do
+         for w in [4 .. 2 .. (4 + 2*warehouseNumber - 1)] do
             let (r,c) = sscanf "%d %d" text.[w]
             let stock = text.[w+1] |> String.split [|' '|] |> Array.map int
             yield {cell = (r,c) ; stock = stock}
