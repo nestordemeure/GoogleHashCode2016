@@ -10,11 +10,15 @@ open GHC.Extensions.Common
 
 type Coord = int * int
 
-type Product = { id : int ; weight : int }
+//type Product = { id : int ; weight : int }
 
-type Warehouse = { cell : Coord ; stock : int array }
+type Product = int
 
-type Order = {adress : Coord ; products : int list}
+type Warehouse = { cell : Coord ; stock : Product array }
+
+type Order = {adress : Coord ; products : Product list}
+
+type Drone = { position : Coord ; content : Product list ; load : int }
 
 //-------------------------------------------------------------------------------------------------
 
