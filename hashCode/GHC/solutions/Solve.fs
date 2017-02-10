@@ -86,8 +86,8 @@ let solution droneNumber deadLine maxLoad (productWeights:_[]) (warehouses:_[]) 
    let orders = orders |> Array.sortBy (fun o -> List.length o.products)
    let mutable result = []
    /// chaque ordre va réserver chaque produit dans la warehouse la plus proche
-   for order in orders do ()
-
+   for order in orders do 
+      ()
    /// chaque ordre, pour chaque warehouse, apelle les drones nécéssaire pour etre complet
    for order in orders do
       for kv in order.BookedProducts do

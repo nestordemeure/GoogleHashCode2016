@@ -27,3 +27,6 @@ let main argv =
     //export 
     export "../output.txt" sol
     0 // return an integer exit code
+
+// add timeout
+
