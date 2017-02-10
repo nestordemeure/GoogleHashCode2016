@@ -34,6 +34,24 @@ let processOneOrder (o:Order) (wl : Warehouse array) =
         let w = closestWharehouse p o.adress wl
         book o p w
 
+// Remove one element from an array
+let removePos (a:'a array) (i: int) = 
+    Array.init (a.Length-1) (fun j -> if j<i then a.[j] else a.[j+1])
+
+
+// Get the cost of the current order
+let getCost (wl : Warehouse array) (o : Order) = 
+    List.sum (List.map (fun (i:Product) -> distance o.adress (closestWharehouse i o.adress wl).cell) o.products) 
+
+// Get all costs and returns the order with the best one and the rest
+let bestCost (wl : Warehouse array) (orders : Order array) =
+    let allCosts = Array.map (fun (o:Order) -> getCost wl o) orders
+    let min = Array.min allCosts
+    match (Array.tryFindIndex (fun x -> x = min) allCosts) with
+     | Some indice -> orders.[indice], (removePos orders indice)
+     | None -> raise (System.ArgumentException("Logical problem"))
+
+
 
 //-------------------------------------------------------------------------------------------------
 // apelle les drones nécéssaire pour etre complet
