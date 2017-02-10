@@ -19,7 +19,7 @@ open GHC.Domain
 
 /// solution
 let solution droneNumber deadLine maxLoad productWeights (warehouses:_[]) orders = 
-   let drones = droneCreates warehouses.[0].cell droneNumber maxLoad
+   let drones = droneCreates droneNumber maxLoad warehouses.[0].cell
    let orders = orders |> Array.sortBy (fun o -> List.length o.products)
    let mutable result = []
    /// chaque ordre va réserver chaque produit dans la warehouse la plus proche
