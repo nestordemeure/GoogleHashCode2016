@@ -106,12 +106,12 @@ let increaseSolution deadLine =
 /// solution
 let solution droneNumber deadLine maxLoad (productWeights:_[]) (warehouses:_[]) orders = 
    let drones = droneCreates droneNumber maxLoad warehouses.[0].cell
-   //let  orders = orders //|> Array.sortBy (fun o -> List.length o.products)
+   let  orders = orders |> Array.sortByDescending (fun o -> List.length o.products)
    let mutable result = []
    /// chaque ordre va réserver chaque produit dans la warehouse la plus proche
-   //for order in orders do 
-   //    processOneOrder order warehouses
-   let orders = 
+   for order in orders do 
+       processOneOrder order warehouses
+   (*let orders = 
       [|
          let mutable ordersTemp = orders
          while ordersTemp <> Array.empty do
@@ -119,7 +119,7 @@ let solution droneNumber deadLine maxLoad (productWeights:_[]) (warehouses:_[]) 
             ordersTemp <- newOrders
             processOneOrder order warehouses
             yield order
-      |]
+      |]*)
    /// chaque ordre, pour chaque warehouse, apelle les drones nécéssaire pour etre complet
    for order in orders do
       for kv in order.BookedProducts do
